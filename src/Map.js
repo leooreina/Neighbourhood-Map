@@ -11,7 +11,6 @@ class Map extends Component {
 
   componentDidMount() {
     this.getFoursquareInfos()
-    this.loadMap()
   }
 
   loadMap = () => {
@@ -22,12 +21,19 @@ class Map extends Component {
   initMap = () => {
     let map = new window.google.maps.Map(document.getElementById('map'), {
       center: {lat: 43.643819, lng: -79.39779},
-      zoom: 14
+      zoom: 15
     })
 
-    let marker = new window.google.maps.Marker({
-      position: {lat: 43.643819, lng: -79.39779},
-      map: map
+    this.state.infos.map(singleVenue => {
+      let marker = new window.google.maps.Marker({
+        position: {
+          lat: singleVenue.venue.location.lat,
+          lng: singleVenue.venue.location.lng
+        },
+        map: map,
+        title: singleVenue.venue.name
+      })
+
     })
   }
 
@@ -43,10 +49,13 @@ class Map extends Component {
 
     axios.get(requestApiUrl + new URLSearchParams(parametersObject))
       .then(response => {
-        this.setState({ infos: response.data.response.groups[0].items })
+        this.setState({
+          infos: response.data.response.groups[0].items
+        }, this.loadMap())
       })
       .catch(error => {
-        console.log(`You got a error ${error}`);
+        console.log(`You got a error ${error}`)
+        alert('Oh no! Something unexpected happened...')
       })
   }
 
