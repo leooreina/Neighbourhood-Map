@@ -1,0 +1,42 @@
+@media (min-width: 320px) and (max-width: 640px) {
+  body {
+    background-color: white;
+  }
+
+  .title-map {
+    text-align: center;
+    font-size: 2.3em;
+    text-transform: uppercase;
+    font-family: 'Raleway', sans-serif;
+    color: black;
+    margin-top: 70px;
+  }
+
+  #map {
+    height: 700px;
+    margin: 0 1% 20px 1%;
+    border-radius: 20px;
+  }
+}
+
+
+@media (min-width: 640px) {
+  body {
+    background-color: white;
+  }
+
+  .title-map {
+    text-align: center;
+    font-size: 4em;
+    text-transform: uppercase;
+    font-family: 'Raleway', sans-serif;
+    color: black;
+    margin-top: 100px;
+  }
+
+  #map {
+    height: 700px;
+    margin: 0 10% 20px 10%;
+    border-radius: 20px;
+  }
+}
