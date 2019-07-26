@@ -1,4 +1,4 @@
-@media (min-width: 320px) and (max-width: 640px) {
+@media (min-width: 320px) and (max-width: 800px) {
   body {
     background-color: white;
   }
@@ -22,15 +22,30 @@
     margin-left: 30px;
   }
 
+  .list-item {
+    list-style-type: none;
+    background-color: grey;
+    border-radius: 10px;
+    padding-left: 5px;
+  }
+
+  .places-list {
+    margin-left: 0;
+  }
+
   #map {
-    height: 700px;
-    margin: 0 1% 20px 1%;
+    height: 900px;
+    margin: 0 0.5% 20px 0.5%;
     border-radius: 20px;
+  }
+
+  #map-container {
+    display: block;
   }
 }
 
 
-@media (min-width: 640px) {
+@media (min-width: 801px) {
   body {
     background-color: white;
   }
@@ -45,18 +60,29 @@
   }
 
   .subtitle-map {
-    text-align: left;
+    text-align: center;
     font-size: 1.3em;
     text-transform: uppercase;
     font-family: 'Raleway', sans-serif;
     color: #c48506;
     margin-top: 10px;
-    margin-left: 30px;
+  }
+
+  .list-item {
+    list-style-type: none;
+    background-color: grey;
+    border-radius: 10px;
+    padding-left: 5px;
   }
 
   #map {
-    height: 700px;
-    margin: 0 10% 20px 10%;
+    height: 900px;
+    margin: 5% 2% 20px 2%;
     border-radius: 20px;
+  }
+
+  #map-container {
+    display: grid;
+    grid-template-columns: 30% 1fr;
   }
 }

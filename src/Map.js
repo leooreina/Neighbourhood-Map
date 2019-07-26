@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
-import SearchField from './SearchField'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearchLocation } from '@fortawesome/free-solid-svg-icons'
+import './css/searchfield.css'
 import './css/map.css'
 import axios from 'axios'
 
 class Map extends Component {
 
   state = {
-    infos: []
+    infos: [],
   }
 
   componentDidMount() {
@@ -14,7 +16,7 @@ class Map extends Component {
   }
 
   loadMap = () => {
-    loadingScript("https://maps.googleapis.com/maps/api/js?libraries=places&key=YOUR_API_KEY&callback=initMap")
+    loadingScript("https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAxAPuxsvKt7MOcfU8yL-urFscW_11DHFM&callback=initMap")
     window.initMap = this.initMap
   }
 
@@ -23,22 +25,15 @@ class Map extends Component {
       center: {lat: 43.643819, lng: -79.39779},
       zoom: 13
     })
-
     let searchButton = document.getElementById('icon-search')
-    let infoWindow = new window.google.maps.InfoWindow()
-    /* Autocomplete form with Toronto places */
-    let timeAutocomplete = new window.google.maps.places.Autocomplete(document.getElementById('search-bar'));
-    timeAutocomplete.bindTo('bounds', map);
 
     this.state.infos.map(singleVenue => {
-
+      let infoWindow = new window.google.maps.InfoWindow()
       let popupMessage =
-      `
-      <div>
-        <h3>${singleVenue.venue.name}</h3>
-        <p>${singleVenue.venue.location.address}</p>
-      </div>
-      `
+      `<div>
+          <h3>${singleVenue.venue.name}</h3>
+          <p>${singleVenue.venue.location.address}</p>
+        </div>`
 
       let marker = new window.google.maps.Marker({
         position: {
@@ -51,7 +46,6 @@ class Map extends Component {
       })
 
       /* Add infoWindow to the markers and center in the map */
-
       marker.addListener('click', function() {
         map.setZoom(16)
         map.setCenter(this.getPosition())
@@ -61,20 +55,16 @@ class Map extends Component {
 
       searchButton.addEventListener('click', function() {
         let geocoder = new window.google.maps.Geocoder()
-        // Make sure the address isn't blank.
         if (document.getElementById('search-bar').value === '') {
-          // window.alert('You must enter an area, or address.');
           alert('You must enter an area, or address');
         } else {
-          // Geocode the address/area entered to get the center. Then, center the map
-          // on it and zoom in
           geocoder.geocode(
             { address: document.getElementById('search-bar').value,
               componentRestrictions: {locality: 'Toronto'}
             }, function(results, status) {
               if (status === window.google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
-                map.setZoom(16);
+                map.setZoom(15);
               } else {
                 console.log('We could not find that location - try entering a more' +
                     ' specific place.');
@@ -118,11 +108,12 @@ class Map extends Component {
 
     const nameStyle = {
       color: '#fcba03',
-      fontFamily: 'Raleway'
+      fontFamily: 'Raleway',
+      padding: '5px 0 5px 0'
     }
 
     const addressStyle = {
-      color: 'black',
+      color: 'white',
       fontFamily: 'Raleway'
     }
 
@@ -133,23 +124,36 @@ class Map extends Component {
     }
 
     return (
-      <div>
-        <SearchField />
-        <main id="map-container">
+      <div id="app">
+        <nav id="header-search" aria-label="Search in Map" role="search">
+          <div className="search-field">
+            <span>
+              <input
+                id="search-bar"
+                placeholder="Search for places..."
+                onChange={this.filterPlaces}
+              />
+            </span>
+            <span><FontAwesomeIcon icon={faSearchLocation} id="icon-search" tabIndex="0"/></span>
+          </div>
+        </nav>
+
+        <div>
           <h1 className="title-map">Neighborhood Map</h1>
-          <h3 className="subtitle-map">Addresses List</h3>
-          <ul>
-            {this.state.infos.map(place => (
-              <li>
-                <h4 style={addressStyle}>{
-                  (place.venue.location.address) ?
-                  (place.venue.location.address) : <span style={itemNotFound}>Address not found</span>
-                } - <span style={nameStyle}>{place.venue.name}</span>
-                </h4>
-              </li>
-            ))}
-          </ul>
-          <div id="map"></div>
+        </div>
+
+        <main id="map-container">
+          <div id="list" aria-label="Places List" role="navigation">
+            <h3 className="subtitle-map">Places List</h3>
+            <ul className="places-list">
+              {this.state.infos.map(place => (
+                <li className="list-item" key={place.venue.id}>
+                  <h4 style={nameStyle}>{place.venue.name}</h4>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div id="map" aria-label="Toronto Map" role="application"></div>
         </main>
       </div>
     )
@@ -167,4 +171,5 @@ const loadingScript = url => {
   insertScript.async = true
   insertScript.defer = true
   getScript.parentNode.insertBefore(insertScript, getScript)
+  insertScript.onerror = () => alert('Oh no! Google Maps API request catch an error.')
 }
