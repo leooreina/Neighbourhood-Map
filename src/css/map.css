@@ -12,6 +12,16 @@
     margin-top: 70px;
   }
 
+  .subtitle-map {
+    text-align: center;
+    font-size: 1.3em;
+    text-transform: uppercase;
+    font-family: 'Raleway', sans-serif;
+    color: black;
+    margin-top: 10px;
+    margin-left: 30px;
+  }
+
   #map {
     height: 700px;
     margin: 0 1% 20px 1%;
@@ -32,6 +42,16 @@
     font-family: 'Raleway', sans-serif;
     color: black;
     margin-top: 100px;
+  }
+
+  .subtitle-map {
+    text-align: left;
+    font-size: 1.3em;
+    text-transform: uppercase;
+    font-family: 'Raleway', sans-serif;
+    color: #c48506;
+    margin-top: 10px;
+    margin-left: 30px;
   }
 
   #map {

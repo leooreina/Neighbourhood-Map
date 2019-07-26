@@ -6,14 +6,14 @@ import './css/searchfield.css'
 class SearchField extends Component {
   render() {
     return (
-      <div className="search-field">
-        <span><FontAwesomeIcon icon={faSearchLocation} className="icon-search"/></span>
-        <span><input className="search-bar" placeholder="Search for places..." /></span>
+      <div>
+        <div className="search-field">
+          <span><input id="search-bar" placeholder="Search for addresses..." /></span>
+          <span><FontAwesomeIcon icon={faSearchLocation} id="icon-search" tabindex="0"/></span>
+        </div>
       </div>
     )
   }
 }
 
 export default SearchField
-
-//
