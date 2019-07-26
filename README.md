@@ -9,7 +9,7 @@ and Foursquare API.
 - You can search for 30 places in Toronto, Canada. Besides that, you
 can also click in markers in the map and see the name and the adresse
 of venue.
-- Huge thanks for Yahya Elharony for this amazing tutorial about
+- Huge thanks to Yahya Elharony for this amazing tutorial about
 Foursquare API: `https://www.youtube.com/watch?v=dAhMIF0fNpo`.
 
 ## How to run the application:
