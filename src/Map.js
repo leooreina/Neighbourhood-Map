@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearchLocation } from '@fortawesome/free-solid-svg-icons'
+import Title from './Title'
 import './css/searchfield.css'
 import './css/map.css'
 import axios from 'axios'
@@ -9,6 +8,8 @@ class Map extends Component {
 
   state = {
     infos: [],
+    search: '',
+    markers: this.infos
   }
 
   componentDidMount() {
@@ -23,59 +24,10 @@ class Map extends Component {
   initMap = () => {
     let map = new window.google.maps.Map(document.getElementById('map'), {
       center: {lat: 43.643819, lng: -79.39779},
-      zoom: 13
+      zoom: 11
     })
-    let searchButton = document.getElementById('icon-search')
-
-    this.state.infos.map(singleVenue => {
-      let infoWindow = new window.google.maps.InfoWindow()
-      let popupMessage =
-      `<div>
-          <h3>${singleVenue.venue.name}</h3>
-          <p>${singleVenue.venue.location.address}</p>
-        </div>`
-
-      let marker = new window.google.maps.Marker({
-        position: {
-          lat: singleVenue.venue.location.lat,
-          lng: singleVenue.venue.location.lng
-        },
-        map: map,
-        title: singleVenue.venue.name,
-        animation: window.google.maps.Animation.DROP
-      })
-
-      /* Add infoWindow to the markers and center in the map */
-      marker.addListener('click', function() {
-        map.setZoom(16)
-        map.setCenter(this.getPosition())
-        infoWindow.setContent(popupMessage)
-        infoWindow.open(map, marker)
-      })
-
-      searchButton.addEventListener('click', function() {
-        let geocoder = new window.google.maps.Geocoder()
-        if (document.getElementById('search-bar').value === '') {
-          alert('You must enter an area, or address');
-        } else {
-          geocoder.geocode(
-            { address: document.getElementById('search-bar').value,
-              componentRestrictions: {locality: 'Toronto'}
-            }, function(results, status) {
-              if (status === window.google.maps.GeocoderStatus.OK) {
-                map.setCenter(results[0].geometry.location);
-                map.setZoom(15);
-              } else {
-                console.log('We could not find that location - try entering a more' +
-                    ' specific place.');
-              }
-            });
-          }
-      })
-
-    })
+    this.createDetails(map)
   }
-
   /* Get Foursquare infos with Axios package */
 
   getFoursquareInfos = () => {
@@ -85,8 +37,7 @@ class Map extends Component {
       client_secret: 'AL4RFZAJBSCPWL5HJM2KUIJKHGKWHPTVJMDS12GWNJY4HYA2',
       query: 'food',
       near: 'toronto',
-      v: '20192407',
-      radius: '5000'
+      v: '20192707'
     }
 
     axios.get(requestApiUrl + new URLSearchParams(parametersObject))
@@ -101,54 +52,62 @@ class Map extends Component {
       })
   }
 
+  onchange = e => {
+    let map = new window.google.maps.Map(document.getElementById('map'), {
+      center: {lat: 43.643819, lng: -79.39779},
+      zoom: 11
+    })
+    const { search, infos, markers } = this.state
+    const filtered = infos.filter(place => {
+      this.createDetails(map)
+      return place.venue.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
+    })
+
+    this.setState({
+      search: e.target.value,
+      infos: filtered
+    })
+  }
+
+  createDetails = (map) => {
+    const { infos } = this.state
+    infos.map(info => {
+      let infoWindow = new window.google.maps.InfoWindow()
+      let popupMessage =`<div><h3>${info.venue.name}</h3><p>${info.venue.location.address}</p></div>`
+      let marker = new window.google.maps.Marker({
+        position: {lat: info.venue.location.lat, lng: info.venue.location.lng},
+        map: map,
+        title: info.venue.name,
+        animation: window.google.maps.Animation.DROP
+      })
+      marker.addListener('click', function() {
+        infoWindow.setContent(popupMessage)
+        infoWindow.open(map, marker)
+      })
+    })
+  }
+
   render() {
-    const listStyle = {
-      display: 'inline'
-    }
-
-    const nameStyle = {
-      color: '#fcba03',
-      fontFamily: 'Raleway',
-      padding: '5px 0 5px 0'
-    }
-
-    const addressStyle = {
-      color: 'white',
-      fontFamily: 'Raleway'
-    }
-
-    const itemNotFound = {
-      color: 'red',
-      fontFamily: 'Raleway',
-      fontStyle: 'italic'
-    }
+    const { search, infos } = this.state
+    const filteredPlaces = infos.filter(place => {
+      return place.venue.name.toLowerCase().indexOf( search.toLowerCase() ) !== -1
+    })
 
     return (
       <div id="app">
         <nav id="header-search" aria-label="Search in Map" role="search">
           <div className="search-field">
-            <span>
-              <input
-                id="search-bar"
-                placeholder="Search for places..."
-                onChange={this.filterPlaces}
-              />
-            </span>
-            <span><FontAwesomeIcon icon={faSearchLocation} id="icon-search" tabIndex="0"/></span>
+            <input id="search-bar" placeholder="Search for places..." onChange={this.onchange}/>
           </div>
         </nav>
-
-        <div>
-          <h1 className="title-map">Neighborhood Map</h1>
-        </div>
-
+        <Title />
         <main id="map-container">
           <div id="list" aria-label="Places List" role="navigation">
             <h3 className="subtitle-map">Places List</h3>
             <ul className="places-list">
-              {this.state.infos.map(place => (
+              {filteredPlaces.map(place => (
                 <li className="list-item" key={place.venue.id}>
-                  <h4 style={nameStyle}>{place.venue.name}</h4>
+                  <h4 className="place-name">{place.venue.name}</h4>
                 </li>
               ))}
             </ul>
@@ -163,7 +122,6 @@ class Map extends Component {
 export default Map
 
 /* Adding the script tag in HTML */
-
 const loadingScript = url => {
   let getScript = window.document.getElementsByTagName('script')[0]
   let insertScript = window.document.createElement('script')
