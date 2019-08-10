@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/neighborhood-map/static/css/main.b67bddd5.chunk.css",
+    "main.js": "/neighborhood-map/static/js/main.f040c288.chunk.js",
+    "main.js.map": "/neighborhood-map/static/js/main.f040c288.chunk.js.map",
+    "runtime~main.js": "/neighborhood-map/static/js/runtime~main.7f9d7057.js",
+    "runtime~main.js.map": "/neighborhood-map/static/js/runtime~main.7f9d7057.js.map",
+    "static/js/2.9f91a5f4.chunk.js": "/neighborhood-map/static/js/2.9f91a5f4.chunk.js",
+    "static/js/2.9f91a5f4.chunk.js.map": "/neighborhood-map/static/js/2.9f91a5f4.chunk.js.map",
+    "index.html": "/neighborhood-map/index.html",
+    "precache-manifest.cef374d218b0708a8c9ce952b1772aff.js": "/neighborhood-map/precache-manifest.cef374d218b0708a8c9ce952b1772aff.js",
+    "service-worker.js": "/neighborhood-map/service-worker.js",
+    "static/css/main.b67bddd5.chunk.css.map": "/neighborhood-map/static/css/main.b67bddd5.chunk.css.map"
+  }
+}
