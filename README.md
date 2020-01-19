@@ -1,4 +1,4 @@
-# Neighborhood Map
+# Neighbourhood Map
 
 - An App that you can search for venues addresses near to
 Red Academy in Toronto. It was programmed with Google Maps API
